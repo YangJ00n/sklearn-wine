@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
 
 # 1. 와인 데이터셋 읽기
 wine = datasets.load_wine()
@@ -29,11 +30,18 @@ print("X_test shape:", X_test.shape)
 
 
 # 3. 모델 선택 및 학습
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train) # 스케일러를 불러와서 훈련 데이터에 맞게 학습 후 변환
+X_test_scaled = scaler.transform(X_test) # 테스트 데이터도 똑같은 기준으로 변환
+
+# 스케일링된 데이터로 모델을 학습
 knn = KNeighborsClassifier(n_neighbors=6)
-knn.fit(X_train, y_train)
+knn.fit(X_train_scaled, y_train)
+
 
 
 # 4. 모델 평가
-y_pred = knn.predict(X_test)
+y_pred = knn.predict(X_test_scaled) # 스케일링된 테스트 데이터로 평가
 scores = metrics.accuracy_score(y_test, y_pred)
+
 print("scores:", scores)
