@@ -45,3 +45,26 @@ y_pred = knn.predict(X_test_scaled) # 스케일링된 테스트 데이터로 평
 scores = metrics.accuracy_score(y_test, y_pred)
 
 print("scores:", scores)
+
+
+# 5. 결과 예측
+# 와인 데이터의 타겟 이름 정의
+classes = {0: 'class_0', 1: 'class_1', 2: 'class_2'}
+
+# 새로운 데이터 제시
+x_new = [
+    [14.5, 1.8, 2.5, 15.5, 115.0, 2.9, 3.2, 0.3, 2.4, 6.5, 1.0, 3.8, 1150.0],  # class_0 추정
+    [12.5, 1.2, 1.4, 11.5,  90.0, 2.0, 0.8, 0.3, 0.6, 2.2, 1.1, 2.0,  450.0],  # class_1 추정
+    [13.5, 3.6, 2.4, 20.0, 105.0, 1.6, 0.9, 0.4, 1.1, 8.5, 0.6, 1.3,  650.0]   # class_2 추정
+]
+
+# 모델이 스케일링된 데이터로 학습되었으므로, 새로운 데이터(x_new)도 반드시 동일한 기준으로 스케일링(변환)을 거쳐야 한다
+# (fit_transform이 아닌 scaler.transform()을 사용)
+x_new_scaled = scaler.transform(x_new)
+
+# 스케일링 완료된 데이터로 예측 수행
+y_predict = knn.predict(x_new_scaled)
+
+print("첫 번째 와인 예측:", classes[y_predict[0]])
+print("두 번째 와인 예측:", classes[y_predict[1]])
+print("세 번째 와인 예측:", classes[y_predict[2]])
